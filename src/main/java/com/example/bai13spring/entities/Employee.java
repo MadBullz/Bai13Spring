@@ -64,7 +64,7 @@ public class Employee implements Serializable {
     private Intern intern;
 
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "employee")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", orphanRemoval=true)
     @JsonIgnore
     private List<Certificate> certificates;
 

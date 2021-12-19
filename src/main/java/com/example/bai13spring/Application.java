@@ -111,7 +111,7 @@ public class Application {
             try{
                 input = sc.nextLine();
                 if(input!=null) return input;
-                else System.out.println("Enter something");;
+                else System.out.println("Enter something");
             }
             catch(Exception ex){ /**/
                 System.out.println(ex.getMessage());
@@ -133,8 +133,6 @@ public class Application {
     @Bean
     public CommandLineRunner Bai13Spring(EmployeeRepository employeeRepository, CertificateRepository certificateRepository) {
         return args -> {
-
-            Scanner sc = new Scanner(System.in);
             do{
                 System.out.println("What do you want to do?");
                 System.out.println("1. Find All");
@@ -191,6 +189,7 @@ public class Application {
                                 break;
                             case 2:
                                 String Majors = checkString("Enter Major");
+                                System.out.println("Enter semester:");
                                 int Semester = checkInt(0, 9);
                                 String University_name = checkString("Enter University Name");
 
@@ -230,10 +229,33 @@ public class Application {
                         }
                         break;
                     case 3:
-                            System.out.println("Delete");
-                        break;
+                        System.out.println("Enter ID to be deleted:");
+                        int Id = checkInt(1, Integer.MAX_VALUE);
+                        Optional<Employee> e = employeeRepository.findById(Id);
+                        if(e.isPresent()){
+                            employeeRepository.delete(e.get());
+                            System.out.println("Deleted");
+                        }
+                        else System.out.println("No such ID found!");
+                break;
                     case 4:
-                            System.out.println("Update");
+                        System.out.println("Enter ID to be updated:");
+                        Optional<Employee> update = employeeRepository.findById(checkInt(1, Integer.MAX_VALUE));
+                        if(update.isPresent()){
+                            Employee new_emp = update.get();
+
+                            String upName = checkName("Enter new employee name");
+                            Date upDay = checkDate("Enter new D.O.B ");
+                            String upPhone = checkPhone("Enter new phone number");
+                            String upMail = checkEmail("Enter new email");
+
+                            new_emp.setFullName(upName);
+                            new_emp.setBirthday(upDay);
+                            new_emp.setPhone(upPhone);
+                            new_emp.setEmail(upMail);
+
+                            employeeRepository.save(new_emp);
+                        }
                         break;
                     case 5:
                         System.exit(0);
